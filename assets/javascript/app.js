@@ -4,16 +4,15 @@
 $(document).ready(function()
 {
 
-	var t = 30;
+	var t = 20;
 	var timeOut;
 	var userPick = "place holder";
 	var correctGuess = 0;
 	var incorrectGuess = 0;
-	var n = Math.floor(Math.random() * 5) + 1;
+	var n = 4;
 	var nCounter = 0;
-	console.log(n);
 
-//Put questions into an array of objects - yes, that's a thing.
+//Put questions into an array of objects.
 var trivQuests = [
 {
 	num: 1,
@@ -52,84 +51,129 @@ var trivQuests = [
 
 ];
 
-	//generate a random to pull question from the array
-	//create a questions answered counter; end @ five and push answer counts
-	//use a timeout to space the new question being served
-	//keep the correct/incorrect alert or send message another way?
-	//review the demo again
+
+//Declare a function to run the question timer
+function timer()
+{
+	t--;
+	if (t>0)
+	{
+		timeOut = setTimeout(timer, 1000);
+
+	}
 
 
+
+
+	$("#timer").text(t);
+
+
+
+	
+};
+
+setTimeout(timer, 1000);
+
+
+//Declare a function to clear the timer
+function clearTimer()
+{
+	clearTimeout(timeOut);
+}
+
+	clearTimeout();
+
+if (n > 0)
+
+{
+	console.log(trivQuests.length);
 
 
 	function question()
 	{
-
-	nCounter++;
-
-	//Push the question text to the TriviaGame page
-	$(".qTxt").text(trivQuests[n].qText);
-
-	//Push the answers to the Trivia game buttons
-	for (i=0; i<trivQuests[n].qAns.length; i++)
-	{
 		
-		//Push an answer to a button
-		$("<button></button>").appendTo(".questions").addClass("btn btn-success btn-lg btn-block").attr("value",trivQuests[n].qAns[i]).text(trivQuests[n].qAns[i]);
-		console.log(trivQuests[n].qAns[i]);
 
-	}
+		$(".qTxt").empty();
+		$(".btn-success").remove();
+		
 
-	function timer()
-	{
-		t--;
-		if (t>0)
+		// n = Math.floor(Math.random() * 4) + 1;
+		console.log("n = " + n);
+		console.log("nCounter = " + nCounter);
+
+		//Push the question text to the TriviaGame page
+		$(".qTxt").text(trivQuests[n].qText);
+
+		//Push the answers to the Trivia game buttons
+		for (i=0; i<trivQuests[n].qAns.length; i++)
 		{
-			timeOut = setTimeout(timer, 1000);
 
-		}
+				//Push an answer to a button
+				$("<button></button>").appendTo(".questions").addClass("btn btn-success btn-lg btn-block").attr("value",trivQuests[n].qAns[i]).text(trivQuests[n].qAns[i]);
+				console.log(trivQuests[n].qAns[i]);
+
+			}
 
 
-		$("#timer").text(t);
-		console.log(t)
+
+
+			$(".btn").on("click", function()
+			{
+
+				// clearTimeout(timeOut);
+				console.log(this);
+				userPick = $(this).val();
+				console.log(userPick);
+				if (userPick == trivQuests[n].cAns)
+				{
+					correctGuess++;
+					console.log(correctGuess);
+					setTimeout(question, 1000);
+					t=20;
+				
+			}
+			else
+			{
+				incorrectGuess++;
+				console.log(incorrectGuess);
+				setTimeout(question, 1000);
+				t=20;
+				
+
+			}
+
+			n--;
+			$(".correct").text("Correct answers: " + correctGuess)
+			$(".incorrect").text("Incorrect answers: " + incorrectGuess);
+			
+			if (n < 0) {
+
+			$(".endGame").text("You have finished the Princess Bride Trivia Game and YOU are AWESOME!");
+			clearTimer();
+
+			}
+
+		});
+
+
+
 	};
 
-	setTimeout(timer, 1000);
 
 
 
 
-	$(".btn").on("click", function()
-	{
+
 		
-		clearTimeout(timeOut);
-		console.log(this);
-		userPick = $(this).val();
-		console.log(userPick);
-		if (userPick == trivQuests[n].cAns)
-		{
-			correctGuess++;
-			console.log(correctGuess);
-			// alert("Correct!");
-		}
-		else
-		{
-			incorrectGuess++;
-			console.log(incorrectGuess);
-			// alert("Incorrect!");
-		}
-	"Correct answers: " + correctGuess;
-	"Incorrect answers: " + incorrectGuess;
+			// setTimeout(question, 2000);
+			// question();
+			console.log("nCounter = " + nCounter);
 
-	});
+			setTimeout(question, 1000*2);
 
-};
 
-if (nCounter<=5)
-{
-	// setTimeout(question, 2000);
-	question();
 
-}
+}	
 
 
 
